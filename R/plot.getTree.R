@@ -6,13 +6,14 @@
 #' @param depth The depth of the tree to be plotted
 #' @param main The title to put on the graph
 #' @param caret using caret T or F
+#' @param sig.digits numeric: specify the number of digits you want to be shown on the tree splits
 #' @param ... Additional parameters to be passed to \code{text.tree}
 #' @export
 #' @examples
 #' library(randomForest)
 #' rforest <- randomForest(Species~., data=iris, ntree=20)
 #' plot.getTree(rforest, k=3, depth=4)
-plot.getTree <- function(rforest=NULL,tr=NULL,k=1, depth=0,main=NULL,caret=F, ...){
+plot.getTree <- function(rforest=NULL,tr=NULL,k=1, depth=0,main=NULL,caret=F, sig.digits=3,...){
   require(randomForest)
   if(caret){
     mod<-rforest
@@ -36,6 +37,7 @@ plot.getTree <- function(rforest=NULL,tr=NULL,k=1, depth=0,main=NULL,caret=F, ..
   if(depth>0){
     x <- snip.depth(x,depth)
   }
+  x$frame$splits<-substr(x$frame$splits,1,sig.digits+3)
   plot(x, type='uniform')
   text(x,split=FALSE,...)
   labelBG(x)
